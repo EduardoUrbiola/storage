@@ -1,107 +1,57 @@
-import React, {useState, useEffect} from 'react';
-import Login from './Login.js';
-import Hero from './Hero.js';
-import fire from './fire';
-import './App.css';
-import keeper from './keeper';
-
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, ActivityIndicator } from 'react-native';
+import { auth } from './fire';
+import { NativeBaseProvider, View } from 'native-base';
+import StorageStatusBar from './components/StatusBar.js';
+import Launch from './Launch';
 
 const App = () => {
-  const [user, setUser] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [emailError, setEmailError] = useState('');
-  const [passwordError, setPasswordError] = useState('');
-  const [hasAccount, setHasAccount] = useState(false);
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  const clearInputs = () => {
-    setEmail('');
-    setPassword('');
-  }
-
-  const clearErrors = () => {
-    setEmailError('');
-    setPassword('');
-  }
-
-  const handleLogin = () => {
-    clearErrors();
-    fire
-      .auth()
-      .signInWithEmailAndPassword(email, password)
-      .catch(err =>{
-        switch(err.code){
-          case 'auth/invalid-email':
-            case 'auth/user-disable':
-              case 'auth/user-not-found':
-                setEmailError(err.message);
-                break;
-              case 'auth/wrong-password':
-                setPasswordError(err.message);
-                break;
-        }
+  const authListener = () => {
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        setUser(user);
+        setLoading(false);
+      } else {
+        setLoading(false);
+        setUser(null);
+      }
     });
   };
 
-  const handleSignup = () => {
-    clearErrors();
-    fire
-      .auth()
-      .createUserWithEmailAndPassword(email, password)
-      .catch(err =>{
-        switch(err.code){
-          case 'auth/email-already-in-use':
-            case 'auth/invalid-email':
-              case 'auth/user-not-found':
-                setEmailError(err.message);
-                break;
-              case 'auth/weak-password':
-                setPasswordError(err.message);
-                break;
-        }
-      });
-  };
-
-  const handleLogout = () => {
-    fire.auth().signOut();
-  }
-
-  const authListener = () => {
-    fire.auth().onAuthStateChanged(user => {
-      if(user){
-        clearInputs();
-        setUser(user);
-      } else {
-          setUser('');
-      }
-    })
-  }
-
   useEffect(() => {
+    setLoading(true);
     authListener();
+
+    return () => {}
   }, []);
 
   return (
-
-    <div className="App ">
-      {user ? (
-        <Hero handleLogout={handleLogout}/>
-      ) : (
-        <Login 
-          email={email} 
-          setEmail={setEmail} 
-          password={password} 
-          setPassword={setPassword} 
-          handleLogin={handleLogin}
-          handleSignup={handleSignup}
-          hasAccount={hasAccount}
-          setHasAccount={setHasAccount}
-          emailError={emailError}
-          passwordError={passwordError}
-        />
-      )};
-    </div> 
+    <>
+      <StorageStatusBar backgroundColor={'#111827'} barStyle="light" />
+      <NativeBaseProvider>
+        {loading ? (
+          <View style={styles.container}>
+            <ActivityIndicator size="large" color="white" />
+          </View>
+        ) : (
+          <Launch user={user} />
+        )}
+      </NativeBaseProvider>
+    </>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#111827',
+  },
+});
 
 export default App;
