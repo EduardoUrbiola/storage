@@ -46,9 +46,27 @@ const Home = (props) => {
           </Text>
           <HStack>
             <Button isLoading={loading} isLoadingText="Logging out" bg="grey" p={2} m={10} rounded={20} onPress={() => navigation.navigate('Find')}>
-              <MaterialCommunityIcons name="package" size={140} color="orange" />
+            <Image
+              // @ts-ignore
+              source={require('../assets/open-box.png')}
+              width="130px"
+              height="130px"
+              alt="logo"
+            />
               <Text fontSize="lg" color="white" bold textAlign="center">
                 Find Storage
+              </Text>
+            </Button>
+            <Button isLoading={loading} isLoadingText="Logging out" bg="grey" p={2} m={10} rounded={20} onPress={() => navigation.navigate('Host')}>
+            <Image
+              // @ts-ignore
+              source={require('../assets/home-3.png')}
+              width="140px"
+              height="140px"
+              alt="logo"
+            />
+              <Text fontSize="lg" color="white" bold textAlign="center">
+                Become a host
               </Text>
             </Button>
           </HStack>

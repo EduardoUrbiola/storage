@@ -1,45 +1,61 @@
-import React from 'react';
-import formHooks from '../components/forms';
-import { Text, Input, Box, Center, VStack, Button } from 'native-base';
+import React from "react";
+import { Button, Text, View, VStack } from "native-base";
+import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
+import { SafeAreaView } from "react-native";
+import { Controller, useForm } from "react-hook-form";
 
-const Find = ({navigation}) => {
-  const { Controller, control, errors, handleSubmit } = formHooks();
+const Find = ({ navigation }) => {
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      location: "",
+    },
+  });
 
-  const search = (data) => {
-    console.log(data);
-    navigation.navigate("Result")
+  const onSubmit = (data) => {
+    navigation.navigate("Result", { location: data.location });
   };
 
   return (
-    <VStack space={2} alignContent={'center'}>
-      <Box>
-        <Center my={25}>
-          <Controller
-            control={control}
-            rules={{
-              // required: true,
-            }}
-            render={({ field: { onChange, onBlur, value } }) => (
-              <Input
-                onBlur={onBlur}
-                onChangeText={onChange}
-                value={value}
-                color={'white'}
-                variant="underlined"
-                placeholder="Search..."
-                width="80%"
-              />
-            )}
-            name="search"
-            defaultValue=""
-          />
-          {errors.search && <Text sub fontSize="md" color="red">This is required.</Text>}
-        </Center>
-      </Box>
-      <Button my={-5} width={'60%'} alignSelf="center"  rounded={12} onPress={handleSubmit(search)}>
-        Search
-      </Button>
-    </VStack>
+    <SafeAreaView style={{ flex: 1 }}>
+      <VStack justifyContent="space-between" flex={1}>
+        {errors.location && <Text color="red.400">This field is required</Text>}
+        <Controller
+          control={control}
+          rules={{
+            required: true,
+          }}
+          render={({ field: { onChange } }) => (
+            <GooglePlacesAutocomplete
+              placeholder="Location"
+              onPress={(data, details = null) => {
+                // 'details' is provided when fetchDetails = true
+                const result = {
+                  description: data.description,
+                  placeId: data.place_id,
+                  reference: data.reference,
+                  structured_formatting: data.structured_formatting,
+                };
+                onChange(result);
+              }}
+              query={{
+                key: process.env.GOOGLE_PLACE_API_KEY,
+                language: "en",
+              }}
+              enablePoweredByContainer={false}
+            />
+          )}
+          name="location"
+        />
+
+        <Button width={"60%"} alignSelf="center" rounded={12} onPress={handleSubmit(onSubmit)}>
+          Search
+        </Button>
+      </VStack>
+    </SafeAreaView>
   );
 };
 

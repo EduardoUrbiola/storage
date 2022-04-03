@@ -93,6 +93,7 @@ const Login = () => {
                   color={'white'}
                   variant="rounded"
                   placeholder="Email"
+                  autoCapitalize='none'
                 />
               )}
               name="email"
@@ -120,6 +121,8 @@ const Login = () => {
                   variant="rounded"
                   color={'white'}
                   placeholder="Password"
+                  autoCapitalize='none'
+                  secureTextEntry={true}
                 />
               )}
               name="password"

@@ -1,65 +1,76 @@
-import React, { useState } from 'react';
-import formHooks from '../components/forms';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import React from "react";
+import formHooks from "../components/forms";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import {
   Text,
   Input,
   Box,
   Center,
-  VStack,
   Button,
   HStack,
   AspectRatio,
   Image,
   KeyboardAvoidingView,
   ScrollView,
-} from 'native-base';
-const Preview = ({ navigation }) => {
+} from "native-base";
+import { SafeAreaView } from "react-native";
+const Preview = ({ navigation, route: { params } }) => {
   const { Controller, control, errors, handleSubmit } = formHooks();
 
+  const { image, location, description, user } = params;
+
   const onSubmit = (data) => {
-    return navigation.navigate('Chat', { message: data.message });
+    return navigation.navigate("Chat", { message: data.message });
   };
 
   return (
-    <>
-      <ScrollView height={'auto'}>
+    <SafeAreaView style={{ flex: 1 }}>
+      <ScrollView height={"auto"}>
         <AspectRatio ratio={16 / 9}>
           <Image
             roundedTop="lg"
             source={{
-              uri: 'https://www.holidify.com/images/cmsuploads/compressed/Bangalore_citycover_20190613234056.jpg',
+              uri: image,
             }}
             alt="image"
           />
         </AspectRatio>
-        <Center>
+        <Center p={3}>
           <HStack space={5}>
-            <Text fontSize="2xl" color="white" bold>
-              Rexborg. Idoho
+            <Text fontSize="xl" color="white" bold>
+              {description}
             </Text>
-            <Text fontSize="2xl" color="green.500" bold>
+            {/* <Text fontSize="2xl" color="green.500" bold>
               $50
-            </Text>
+            </Text> */}
           </HStack>
         </Center>
         <Box>
           <HStack mt={20}>
-            <Center bg="transparent" width={'100%'} height={'50%'}>
+            <Center bg="transparent" width={"100%"} height={"50%"}>
               <HStack alignItems="center" justifyContent="center" space={4}>
                 <Image
                   width={60}
                   height={60}
                   alt="image"
                   source={require(// @ts-ignore
-                  '../assets/icon-36.png')}
+                  "../assets/icon-36.png")}
                 />
                 <Text fontSize="2xl" fontWeight="400" color="white">
-                  Sharon Clement
+                  {user}
                 </Text>
               </HStack>
             </Center>
           </HStack>
+          <Button
+            onPress={() => navigation.navigate("Payment")}
+            marginTop={10}
+            width={140}
+            height={60}
+            alignSelf={"center"}
+          >
+            Make a payment
+          </Button>
         </Box>
       </ScrollView>
       <KeyboardAvoidingView behavior="height">
@@ -68,8 +79,8 @@ const Preview = ({ navigation }) => {
             Cannot send blank message
           </Text>
         )}
-        <HStack space={3} alignItems="center" justifyContent="center" width={'100%'}>
-          <Center width={'80%'}>
+        <HStack space={3} alignItems="center" justifyContent="center" width={"100%"}>
+          <Center width={"80%"}>
             <Controller
               control={control}
               rules={{
@@ -80,8 +91,8 @@ const Preview = ({ navigation }) => {
                   onBlur={onBlur}
                   onChangeText={onChange}
                   value={value}
-                  color={'#111827'}
-                  bg={'white'}
+                  color={"#111827"}
+                  bg={"white"}
                   variant="outline"
                   placeholder="type message..."
                   width="95%"
@@ -97,7 +108,7 @@ const Preview = ({ navigation }) => {
           </Button>
         </HStack>
       </KeyboardAvoidingView>
-    </>
+    </SafeAreaView>
   );
 };
 
