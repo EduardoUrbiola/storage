@@ -1,31 +1,30 @@
-import React from 'react';
+import React from "react";
 // @ts-ignore
-import {
-  Text,
-  Pressable,
-  Box,
-  Center,
-  VStack,
-  Button,
-  HStack,
-  AspectRatio,
-  Image,
-} from 'native-base';
+import { Text, Pressable, Box, Center, VStack, HStack, AspectRatio, Image } from "native-base";
+import { useNavigation } from "@react-navigation/native";
 
-const ResultCard = ({ navigation }) => {
+const ResultCard = (data) => {
+  const navigation = useNavigation();
+  const {image, location, description, user} = data
   return (
     <VStack space={20}>
-      <Pressable _pressed={{bgColor: 'darkblue'}} p={2} onPress={() => navigation.navigate('Preview')}>
+      <Pressable
+        _pressed={{ bgColor: "darkblue" }}
+        p={2}
+        onPress={() => navigation.navigate("Preview", data)}
+      >
         <Box>
           <AspectRatio ratio={16 / 9}>
             <Image
               roundedTop="lg"
               source={{
-                uri: 'https://www.holidify.com/images/cmsuploads/compressed/Bangalore_citycover_20190613234056.jpg',
+                uri: image,
               }}
               alt="image"
             />
           </AspectRatio>
+
+            
           <Center
             p={1}
             rounded="full"
@@ -33,13 +32,13 @@ const ResultCard = ({ navigation }) => {
             boxSize={12}
             position="absolute"
             left={0}
-            mx={10}
+            mx={2}
             zIndex={3}
             _text={{
-              color: 'white',
-              textAlign: 'center',
-              fontWeight: '700',
-              fontSize: 'xs',
+              color: "white",
+              textAlign: "center",
+              fontWeight: "700",
+              fontSize: "xs",
             }}
           >
             <Image
@@ -51,27 +50,28 @@ const ResultCard = ({ navigation }) => {
           <Center
             bg="transparent"
             _text={{
-              color: 'white',
-              fontWeight: '700',
-              fontSize: 'lg',
+              color: "white",
+              fontWeight: "900",
+              fontSize: "lg",
             }}
             position="absolute"
             top={0}
-            width={'80%'}
-            height={'20%'}
+            width={"80%"}
+            height={"20%"}
             px={2}
             py={1}
           >
-            Sharon Clement
+            {user}
           </Center>
-          <Center>
+
+          <Center px={3}>
             <HStack space={5}>
-              <Text fontSize="2xl" color="white" bold>
-                Rexborg. Idoho
+              <Text textAlign="center" fontSize="2xl" color="white" bold>
+               {description.length > 20 ? `${description.substring(0, 20)}...` : description}
               </Text>
-              <Text fontSize="2xl" color="green.500" bold>
+              {/* <Text fontSize="2xl" color="green.500" bold>
                 $50
-              </Text>
+              </Text> */}
             </HStack>
           </Center>
         </Box>

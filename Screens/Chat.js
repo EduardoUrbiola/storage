@@ -40,7 +40,7 @@ const Chat = ({
                 '../assets/icon-36.png')}
               />
               <Text fontSize="2xl" bold color="aliceblue">
-                Sharon Clement
+                Shane Clements
               </Text>
             </HStack>
           </Box>
