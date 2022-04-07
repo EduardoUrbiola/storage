@@ -15,7 +15,7 @@ const Result = ({ route: { params } }) => {
   useEffect(() => {
     setLoading(true);
     db.collection("hosts")
-      .where("location", "==", location)
+      .where("location.description", "==", location.description)
       .get()
       .then((snapshot) => {
         const result = snapshot.docs.map((doc) => ({
@@ -36,7 +36,7 @@ const Result = ({ route: { params } }) => {
 
     return () => {};
   }, [location]);
-console.log(result)
+
   return (
     <ScrollView flex={1}>
       {loading ? (

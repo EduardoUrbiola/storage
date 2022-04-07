@@ -5,7 +5,7 @@ import { useNavigation } from "@react-navigation/native";
 
 const ResultCard = (data) => {
   const navigation = useNavigation();
-  const {image, location, description, user} = data
+  const { image, name, description, amount } = data;
   return (
     <VStack space={20}>
       <Pressable
@@ -23,8 +23,6 @@ const ResultCard = (data) => {
               alt="image"
             />
           </AspectRatio>
-
-            
           <Center
             p={1}
             rounded="full"
@@ -44,7 +42,7 @@ const ResultCard = (data) => {
             <Image
               alt="image"
               source={require(// @ts-ignore
-              '../assets/icon-36.png')}
+              "../assets/icon-36.png")}
             />
           </Center>
           <Center
@@ -61,17 +59,17 @@ const ResultCard = (data) => {
             px={2}
             py={1}
           >
-            {user}
+            {name}
           </Center>
 
           <Center px={3}>
             <HStack space={5}>
               <Text textAlign="center" fontSize="2xl" color="white" bold>
-               {description.length > 20 ? `${description.substring(0, 20)}...` : description}
+                {description.length > 20 ? `${description.substring(0, 20)}...` : description}
               </Text>
-              {/* <Text fontSize="2xl" color="green.500" bold>
-                $50
-              </Text> */}
+              <Text fontSize="2xl" color="green.500" bold>
+                ${amount}
+              </Text>
             </HStack>
           </Center>
         </Box>

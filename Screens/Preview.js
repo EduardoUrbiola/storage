@@ -12,12 +12,13 @@ import {
   Image,
   KeyboardAvoidingView,
   ScrollView,
+  VStack,
 } from "native-base";
 import { SafeAreaView } from "react-native";
 const Preview = ({ navigation, route: { params } }) => {
   const { Controller, control, errors, handleSubmit } = formHooks();
 
-  const { image, location, description, user } = params;
+  const { image, amount, description, user, name } = params;
 
   const onSubmit = (data) => {
     return navigation.navigate("Chat", { message: data.message });
@@ -40,9 +41,9 @@ const Preview = ({ navigation, route: { params } }) => {
             <Text fontSize="xl" color="white" bold>
               {description}
             </Text>
-            {/* <Text fontSize="2xl" color="green.500" bold>
-              $50
-            </Text> */}
+            <Text fontSize="2xl" color="green.500" bold>
+              {`$${amount}`}
+            </Text>
           </HStack>
         </Center>
         <Box>
@@ -57,13 +58,13 @@ const Preview = ({ navigation, route: { params } }) => {
                   "../assets/icon-36.png")}
                 />
                 <Text fontSize="2xl" fontWeight="400" color="white">
-                  {user}
+                  {name}
                 </Text>
               </HStack>
             </Center>
           </HStack>
           <Button
-            onPress={() => navigation.navigate("Payment")}
+            onPress={() => navigation.navigate("Payment", {data: params})}
             marginTop={10}
             width={140}
             height={60}
@@ -72,41 +73,46 @@ const Preview = ({ navigation, route: { params } }) => {
             Make a payment
           </Button>
         </Box>
-      </ScrollView>
+      </ScrollView> 
       <KeyboardAvoidingView behavior="height">
-        {errors.message && (
-          <Text fontSize="xs" alignSelf="center" color="red.400">
-            Cannot send blank message
-          </Text>
-        )}
-        <HStack space={3} alignItems="center" justifyContent="center" width={"100%"}>
-          <Center width={"80%"}>
-            <Controller
-              control={control}
-              rules={{
-                required: true,
-              }}
-              render={({ field: { onChange, onBlur, value } }) => (
-                <Input
-                  onBlur={onBlur}
-                  onChangeText={onChange}
-                  value={value}
-                  color={"#111827"}
-                  bg={"white"}
-                  variant="outline"
-                  placeholder="type message..."
-                  width="95%"
-                />
-              )}
-              name="message"
-              defaultValue=""
-            />
-          </Center>
+        <Text ml={3} color="white">
+          Send a message to: <Text bold>{user}</Text>
+        </Text>
+        <VStack>
+          {errors.message && (
+            <Text fontSize="xs" alignSelf="center" color="red.400">
+              Cannot send blank message
+            </Text>
+          )}
+          <HStack space={3} alignItems="center" justifyContent="center" width={"100%"}>
+            <Center width={"80%"}>
+              <Controller
+                control={control}
+                rules={{
+                  required: true,
+                }}
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <Input
+                    onBlur={onBlur}
+                    onChangeText={onChange}
+                    value={value}
+                    color={"#111827"}
+                    bg={"white"}
+                    variant="outline"
+                    placeholder="type message..."
+                    width="95%"
+                  />
+                )}
+                name="message"
+                defaultValue=""
+              />
+            </Center>
 
-          <Button variant="outline" onPress={handleSubmit(onSubmit)}>
-            <MaterialCommunityIcons name="email-send" size={30} color="aliceblue" />
-          </Button>
-        </HStack>
+            <Button variant="outline" onPress={handleSubmit(onSubmit)}>
+              <MaterialCommunityIcons name="email-send" size={30} color="aliceblue" />
+            </Button>
+          </HStack>
+        </VStack>
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
