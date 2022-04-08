@@ -48,6 +48,7 @@ export default function Host() {
     defaultValues: {
       name: "",
       description: "",
+      amount: "",
       location: "",
     },
   });
@@ -89,6 +90,8 @@ export default function Host() {
       docRef.delete();
       console.log("failed: ", error);
     }
+
+
   };
 
   return (
@@ -138,6 +141,30 @@ export default function Host() {
                 />
               )}
               name="description"
+            />
+            {errors.name && <Text color="red.400">This is required.</Text>}
+          </View>
+
+          <View>
+            <Controller
+              control={control}
+              rules={{
+                required: true,
+              }}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <Input
+                  onBlur={onBlur}
+                  onChangeText={onChange}
+                  value={value}
+                  // marginTop={1}
+                  // marginBottom={2}
+                  color={"white"}
+                  placeholder="Amount"
+                  width="100%"
+                  // height={20}
+                />
+              )}
+              name="amount"
             />
             {errors.name && <Text color="red.400">This is required.</Text>}
           </View>

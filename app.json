@@ -27,6 +27,14 @@
     },
     "web": {
       "favicon": "./assets/icon.png"
-    }
+    },
+    "plugins": [
+      [
+        "@stripe/stripe-react-native",
+        {
+          "merchantIdentifier": ""
+        }
+      ]
+    ]
   }
 }
